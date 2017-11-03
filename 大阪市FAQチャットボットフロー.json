@@ -1,0 +1,212 @@
+[
+    {
+        "id": "bd3ee4c6.58485",
+        "type": "tab",
+        "label": "大阪市FAQボット",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e5a073b8.f6cbf8",
+        "type": "http in",
+        "z": "bd3ee4c6.58485",
+        "name": "",
+        "url": "/bot2",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "3e9e5db9.26d37a"
+            ]
+        ]
+    },
+    {
+        "id": "2bb9279e.d5be4",
+        "type": "http response",
+        "z": "bd3ee4c6.58485",
+        "name": "",
+        "x": 470,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a3b098e3.d2c198",
+        "type": "comment",
+        "z": "bd3ee4c6.58485",
+        "name": "2. ユーザーからの入力受け付け",
+        "info": "",
+        "x": 150,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c8ab59d7.9239c8",
+        "type": "http in",
+        "z": "bd3ee4c6.58485",
+        "name": "",
+        "url": "/bot2",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 260,
+        "wires": [
+            [
+                "42c1bd1d.152334"
+            ]
+        ]
+    },
+    {
+        "id": "d53b01be.f26bc8",
+        "type": "template",
+        "z": "bd3ee4c6.58485",
+        "name": "レスポンスの定義",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n    \"response\" : \"{{answer}}\",\n    \"evaluation\" : \"{{evaluation}}\",\n    \"ref_url\" : \"{{ref_url}}\"\n}\n",
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "11f7ca4d.af440e",
+                "377494f3.92a124"
+            ]
+        ]
+    },
+    {
+        "id": "377494f3.92a124",
+        "type": "http response",
+        "z": "bd3ee4c6.58485",
+        "name": "",
+        "x": 510,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "42c1bd1d.152334",
+        "type": "function",
+        "z": "bd3ee4c6.58485",
+        "name": "入力テキスト受け渡し",
+        "func": "context.global.input_text =  msg.payload.input_text;\nmsg.payload = msg.payload.input_text;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 320,
+        "y": 260,
+        "wires": [
+            [
+                "49cebaa4.5204f4"
+            ]
+        ]
+    },
+    {
+        "id": "a52a92a6.050a88",
+        "type": "comment",
+        "z": "bd3ee4c6.58485",
+        "name": "1. botページの表示",
+        "info": "",
+        "x": 110,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "11f7ca4d.af440e",
+        "type": "debug",
+        "z": "bd3ee4c6.58485",
+        "name": "レスポンス",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 530,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "fa89667a.c0d488",
+        "type": "debug",
+        "z": "bd3ee4c6.58485",
+        "name": "Conversationの返り値",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "c3bd4de4.028088",
+        "type": "template",
+        "z": "bd3ee4c6.58485",
+        "name": "入力画面",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<head>\n  <meta charset=\"UTF-8\">\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\n  <title>Watson Conversation</title>\n  <link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\" rel=\"stylesheet\">\n  <style type=\"text/css\">\n\n\n  .bs-component {\n    position: relative;\n  }\n  .demoSize{\n    font-size: 22px; /*DEMO*/\n  }\n  .textEllipsis{\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  div#headerArea {\n    position: fixed !important;\n    position: absolute;\n    background-color: #00DD00;\n    color: #FFF;\n    top: 0;\n    height: 50px;\n    left: 0;\n    width: 100%;\n    z-index: 2;\n  }\n  div#conversation_field {\n    padding-left: 10%;\n    padding-right: 10%;\n  }\n  input.btn{\n    background-color: #00DD00;\n    color: #FFFFFF;\n  }\n\n\n  @media ( min-width: 768px ) {\n    body {\n      padding-top: 80px;\n      padding-bottom: 10%;\n    }\n    div#footerArea {\n      position: fixed !important;\n      position: absolute;\n      background-color: #FFFFFF;\n      bottom: 0;\n      height: 100px;\n      padding-top: 10px;\n      padding-right: 10%;\n      left: 0;\n      width:  80vw;\n      z-index: 1;\n    }\n    #QuestionText{\n      width:  70vw;\n      margin-left: 1%;\n    }\n  }\n\n  /*モバイル用 Media Queries*/\n  @media screen and (max-width: 768px) {\n    body {padding-top: 80px;\n      padding-bottom: 10%;\n    }\n    #banner {\n      min-height: 70px;\n      border-bottom: none;\n    }\n    div#conversation_field {\n    padding-left: 10%;\n    padding-right: 10%;\n    padding-bottom: 15%;\n  }\n    div#footerArea {\n      position: fixed !important;\n      position: absolute;\n      background-color: #FFFFFF;\n      bottom: 0;\n      height: 100px;\n      padding-top: 0px;\n      padding-right: 0%;\n      left: 0;\n      width: 100%;\n      z-index: 3;\n      background-color: transparent;\n    }\n    div.content{\n      position: absolute;\n      bottom:26%;\n    }\n\n    #QuestionText{\n      width: 70vw;\n      margin-left: 1%;\n    }\n  }\n\n  /* balloon common */\n  div.balloon-wrapper {\n  \twidth: 500px;\n  \tmargin: 15px auto;\n  }\n  div.balloon-wrapper::after {\n  \tclear: both;\n  \tcontent: \"\";\n  \tdisplay: block;\n  \tline-height: 0;\n  }\n  p.balloon-left,\n  p.balloon-right {\n  \tposition: relative;\n  \tz-index: 1;\n  \tmax-width: 80%;\n  \tmin-width: 10%;\n  \tmargin: 15px auto;\n  \tpadding: 13px;\n  \tbackground-color: #fff;\n  \tborder-width: 3px;\n  \tborder-style: solid;\n  \tborder-radius: 10px;\n  }\n  p.balloon-left::before,\n  p.balloon-right::before {\n  \tcontent: \"\";\n  \tdisplay: block;\n  \tposition: absolute;\n  \tz-index: 10;\n  \ttop: 10px;\n  \twidth:  0;\n  \theight: 0;\n  \tborder: 15px solid transparent;\n  }\n  p.balloon-left::after,\n  p.balloon-right::after {\n  \tcontent: \"\";\n  \tdisplay: block;\n  \tposition: absolute;\n  \tz-index: 100;\n  \ttop: 10px;\n  \twidth:  0;\n  \theight: 0;\n  \tborder: 15px solid transparent;\n  }\n\n  /* balloon left */\n  p.balloon-left {\n  \tfloat: left;\n  \tborder-color: #EEEEEE;\n    background-color: #EEEEEE;\n    overflow: hidden;\n    width: 100%;\n  }\n  p.balloon-left::before {\n  \tleft: -31px;\n  \tborder-right: 15px solid #EEEEEE;\n  }\n  p.balloon-left::after {\n  \tleft: -26px;\n  \tborder-right: 15px solid #EEEEEE;\n  }\n\n  /* balloon right */\n  p.balloon-right {\n  \tfloat: right;\n  \tborder-color: #00DD00;\n  \tbackground-color: #00DD00;\n    color:#ffffff;\n  }\n  p.balloon-right::before {\n  \tright: -31px;\n  \tborder-left: 15px solid #00DD00;\n  }\n  p.balloon-right::after {\n  \tright: -26px;\n  \tborder-left: 15px solid #00DD00;\n  }\n  </style>\n\n</head>\n<body class=\"demoSize\" style=\"font-family:'Lucida Grande', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, メイリオ, sans-serif;\">\n\n  <!-- header\n  ================================================== -->\n  <header>\n      <div class=\"container-fluid\" id=\"headerArea\">\n        <h4>Watson Conversation</h4>\n      </div><!-- /.container-fluid -->\n  </header>\n\n  <!-- ガイド部分\n  ================================================== -->\n  <div class=\"row\">\n    <div class=\"col-lg-8 col-md-10 col-sm-12 col-xs-12\">\n        <div class=\"bs-component\">\n            <div id=\"conversation_field\"></div>\n        </div>\n    </div>\n  </div>\n\n  <!-- Footer箇所\n  ================================================== -->\n  <form id=\"searchFormId\" action=\"#\">\n  <div class=\"row container-fluid\" id=\"footerArea\">\n    \t<div class=\"content\">\n          <table>\n            <tr>\n              <td><input type=\"text\" class=\"form-control demoSize\" id=\"QuestionText\" placeholder=\"文章を入力してください\"></td>\n              <td><input type=\"submit\" value=\"送信\" class=\"btn demoSize\" onclick=\"askwatson($('#QuestionText').val());\"></button></td>\n            </tr>\n          </table>\n    \t</div>\n  </div>\n  </form>\n\n  <!-- JavaScript Section\n  ================================================== -->\n  <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n  <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n  <script>\n  var answerNumber = 1;\n  var conversation_id = \"\";\n  var client_id = \"\";\n  var dialog=false;\n\n$(function(){\n  setTimeout(function(){\n    document.getElementById(\"conversation_field\").innerHTML += '<div class=\"row\"><div class=\"col-xs-11\"><p class=\"balloon-left\">{{payload}}</p></div></div>';\n   },1000);\n  });\n\n  function askwatson(question) {\n    question = question.replace(/\\r?\\n/g,\"\");\n    question_no_space = question.replace(/\\s/g,\"\");\n    if(question_no_space != \"\") {\n        document.getElementById(\"conversation_field\").innerHTML += '<div class=\"row\"><div class=\"col-xs-11\"><p class=\"balloon-right\" id=\"watsonAnswer' + answerNumber + '\">' + question + '</p></div></div>';\n        $('#QuestionText').val(\"\");\n        $.ajax({\n            url: '/bot2',\n            type: \"POST\",\n            data: {\n                \"input_text\" : question\n            },\n            dataType: 'json',\n        })\n        .done(function(response){\n            if(response.conversation_id != null){\n                conversation_id = response.conversation_id;\n                dialog=true;\n            }\n//            var answer = response.response.replace(/\\n/g, \"<br>\") + '<br>(' + response.evaluation + ')';\n            var answer = response.response.replace(/\\n/g, \"<br>\");\n            if(response.evaluation!==\"\") {\n                answer += '<br>(' + response.evaluation + ')';\n            }\n            if(response.ref_url!==\"\") {\n                answer += '<br><a href=\"'+response.ref_url+'\" target=\"_blank\">'+response.ref_url+'</a>';\n            }\n            document.getElementById(\"conversation_field\").innerHTML += '<div class=\"row\"><div class=\"col-xs-11\"><p class=\"balloon-left\">' + answer + '</p></div></div>';\n            document.getElementById(\"watsonAnswer\" + answerNumber).scrollIntoView(true);\n            document.getElementById(\"QuestionText\").focus();\n            $('#QuestionText').val(\"\");\n            answerNumber++;\n        })\n        .fail(function( jqXHR, textStatus, errorThrown ){\n            document.getElementById(\"conversation_field\").innerHTML += '<div class=\"row\"><div class=\"col-xs-11\"><p class=\"balloon-left\">' + \"申し訳ございません。データに不備があります。\" + '</p></div></div>';\n        });\n\n    }\n    $('#searchFormId').on('submit', function() {\n        var question = $('#QuestionText').val();\n        askwatson(question);\n        return false;\n    });\n  }\n  </script>\n</body>\n",
+        "x": 320,
+        "y": 120,
+        "wires": [
+            [
+                "2bb9279e.d5be4"
+            ]
+        ]
+    },
+    {
+        "id": "add6f8c7.673b38",
+        "type": "function",
+        "z": "bd3ee4c6.58485",
+        "name": "回答を整形",
+        "func": "\nvar text = msg.payload.output.text[0];\nvar index = text.indexOf(\"http://\");\n\nmsg.answer = text.substring(0,index);\nmsg.evaluation = \"\";\nmsg.ref_url = text.substr(index);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "d53b01be.f26bc8"
+            ]
+        ]
+    },
+    {
+        "id": "3e9e5db9.26d37a",
+        "type": "template",
+        "z": "bd3ee4c6.58485",
+        "name": "あいさつ",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "大阪市への質問を入力して下さい。担当の部局をお答えします。",
+        "x": 260,
+        "y": 80,
+        "wires": [
+            [
+                "c3bd4de4.028088"
+            ]
+        ]
+    },
+    {
+        "id": "49cebaa4.5204f4",
+        "type": "watson-conversation-v1",
+        "z": "bd3ee4c6.58485",
+        "name": "",
+        "workspaceid": "6f0db6fe-f6c2-4675-b3f1-e577461d76f9",
+        "multiuser": false,
+        "context": true,
+        "empty-payload": false,
+        "default-endpoint": true,
+        "service-endpoint": "https://gateway.watsonplatform.net/conversation/api",
+        "x": 330,
+        "y": 300,
+        "wires": [
+            [
+                "fa89667a.c0d488",
+                "add6f8c7.673b38"
+            ]
+        ]
+    }
+]
